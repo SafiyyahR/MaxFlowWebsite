@@ -8,11 +8,13 @@ module.exports = class WeightedGraph {
         this.resLinkedAdjacencyList = [];
         this.residualLinkedList = [];
         this.resultLinkedList = [];
+        this.masterLinkedList = [];
         for (let index = 0; index < nodes; index++) {
             this.linkedAdjacencyList.push([]);
             this.resLinkedAdjacencyList.push([]);;
             this.residualLinkedList.push([]);
             this.resultLinkedList.push([]);
+            this.masterLinkedList.push([]);
         }
         this.breakDownOfMaxFlow = [];
         //make an array to store the path found in the breadthFirstSearch which shows a path from the source to the sink
@@ -50,25 +52,25 @@ module.exports = class WeightedGraph {
                         return new Edge(start, weight, end);
                     } else if (foundEdge != null) {
                         //this prints to user that an edge with this start and end node exists
-                        return {"message":"There is a connection between node " + start + " and " + end + " created before."}
+                        return { "isInvalid": true, "message": "There is a connection between node " + start + " and " + end + " created before." }
                     }
                 } else {
                     //this prints to the user that the weight of an edge has to greater than zero
-                    return {"message":"Weight of an edge must be greater than zero."}
+                    return { "isInvalid": true, "message": "Weight of an edge must be greater than zero." }
                 }
                 //prints specific error messages
             } else if (end == 0) {
-                return {"message":"Node 0 cannot be an end node."}
+                return { "isInvalid": true, "message": "Node 0 cannot be an end node." }
             } else if (start == end) {
-                return {"message":"Start node and end node cannot be the same."}
+                return { "isInvalid": true, "message": "Start node and end node cannot be the same." }
             } else {
-                return {"message":"Node " + end + " is not in the graph."}
+                return { "isInvalid": true, "message": "Node " + end + " is not in the graph." }
             }
             //prints specific error messages
         } else if (start == this.nodes - 1) {
-            return {"message":"Node " + (this.nodes - 1) + " cannot be a start node."}
+            return { "isInvalid": true, "message": "Node " + (this.nodes - 1) + " cannot be a start node." }
         } else {
-            return {"message":"Node " + start + " is not in the graph."}
+            return { "isInvalid": true, "message": "Node " + start + " is not in the graph." }
         }
         //the method returns false if the user has entered anything incorrectly.
         return this.FALSE_EDGE;
@@ -77,7 +79,7 @@ module.exports = class WeightedGraph {
     addWeightedEdge(start, weight, end) {
         var edge = this.isEdgeValid(start, weight, end, this.linkedAdjacencyList);
         //if FALSE_EDGE has been returned then true is sent to indicate that the edge has not been added
-        if (edge == null || edge == this.FALSE_EDGE) {
+        if (edge == null || edge == this.FALSE_EDGE || edge.isInvalid) {
             return true;
         } else {
             //else the edge is added
@@ -208,11 +210,12 @@ module.exports = class WeightedGraph {
         if (max_flow != 0) {
             //the result graph is found which gives the max flow
             this.setLinkedList(this.resLinkedAdjacencyList, this.residualLinkedList);
+            this.setLinkedList(this.masterLinkedList, this.linkedAdjacencyList);
             this.findLinkedListResult();
             // console.log("The source - " + 0 + ".");
             // console.log("The sink - " + (this.nodes - 1) + ".");
             // console.log("The maximum possible flow is " + max_flow + ".");
-            return { "source": 0, "sink": this.nodes - 1, max_flow, "residual": this.resLinkedAdjacencyList, "result": this.resultLinkedList, "original": this.linkedAdjacencyList, "breakDownOfFlow": this.breakDownOfMaxFlow };
+            return { "source": 0, "sink": this.nodes - 1, max_flow, "residual": this.resLinkedAdjacencyList, "result": this.resultLinkedList, "original": this.masterLinkedList, "breakDownOfFlow": this.breakDownOfMaxFlow };
         } else {
             return { "message": "Cannot find maximum possible flow as there is no connection between the sink and source." };
         }

@@ -3,8 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// var WeightedGraph = require('./models/weightedGraph');
-// var weightedGraph = new WeightedGraph(6);
+var generate = require('./services/generate_network.service');
+var weightedGraph = generate.generate_network(6,12,21);
 // console.log(weightedGraph);
 // console.log(weightedGraph.addWeightedEdge(0, 8, 2))
 // console.log(weightedGraph.addWeightedEdge(0, 10, 1));
@@ -17,10 +17,10 @@ var logger = require('morgan');
 // console.log(weightedGraph.addWeightedEdge(3, 3, 5));
 // console.log(weightedGraph.addWeightedEdge(3, 7, 2));
 // console.log(weightedGraph.addWeightedEdge(3, 6, 4));
-// // weightedGraph.printWeightedGraph(weightedGraph.linkedAdjacencyList);
-// var result=weightedGraph.findMaxFlow();
-// console.log(result);
-// weightedGraph.printWeightedGraph(weightedGraph.resultLinkedList);
+weightedGraph.printWeightedGraph(weightedGraph.linkedAdjacencyList);
+var result=weightedGraph.findMaxFlow();
+console.log(result);
+weightedGraph.printWeightedGraph(weightedGraph.resultLinkedList);
 var indexRouter = require('./routes/index.route');
 
 var app = express();
