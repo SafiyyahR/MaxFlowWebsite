@@ -1,0 +1,17 @@
+.form-submit-btn{
+    background-color: #4c96d7;
+    color: black;
+}
+.form-label-2{
+    padding: 0 !important;
+}
+.upld-file-format{
+    font-size: 2rem !important;
+    border: none !important;
+    text-align: center !important;
+    display: inline-block !important;
+    cursor: pointer !important;
+    background-color: white !important;
+    color: #212529 !important;
+    
+}

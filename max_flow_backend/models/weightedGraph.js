@@ -72,15 +72,13 @@ module.exports = class WeightedGraph {
         } else {
             return { "isInvalid": true, "message": "Node " + start + " is not in the graph." }
         }
-        //the method returns false if the user has entered anything incorrectly.
-        return this.FALSE_EDGE;
     }
 
     addWeightedEdge(start, weight, end) {
         var edge = this.isEdgeValid(start, weight, end, this.linkedAdjacencyList);
         //if FALSE_EDGE has been returned then true is sent to indicate that the edge has not been added
-        if (edge == null || edge == this.FALSE_EDGE || edge.isInvalid) {
-            return true;
+        if (edge == null || edge.isInvalid) {
+            return edge;
         } else {
             //else the edge is added
             var innerArr = this.linkedAdjacencyList[start];

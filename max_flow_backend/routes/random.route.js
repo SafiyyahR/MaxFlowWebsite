@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-var maxFlowController = require("../controllers/maxflow.controller");
+var randomController = require("../controllers/random.controller");
 
 /**
  * Route serving similar apps page.
  */
 
-router.post("/", maxFlowController.findMaxFlow);
+router.post("/", randomController.findMaxFlow);
 
 module.exports = router;
