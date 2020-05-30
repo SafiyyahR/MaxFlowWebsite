@@ -91,7 +91,6 @@ module.exports = class WeightedGraph {
         for (let index = 0; index < linkedList.length; index++) {
             var list = linkedList[index];
             for (let index1 = 0; index1 < list.length; index1++) {
-                console.log(list[index1]);
             }
 
         }
@@ -210,9 +209,6 @@ module.exports = class WeightedGraph {
             this.setLinkedList(this.resLinkedAdjacencyList, this.residualLinkedList);
             this.setLinkedList(this.masterLinkedList, this.linkedAdjacencyList);
             this.findLinkedListResult();
-            // console.log("The source - " + 0 + ".");
-            // console.log("The sink - " + (this.nodes - 1) + ".");
-            // console.log("The maximum possible flow is " + max_flow + ".");
             return { "source": 0, "sink": this.nodes - 1, max_flow, "residual": this.resLinkedAdjacencyList, "result": this.resultLinkedList, "original": this.masterLinkedList, "breakDownOfFlow": this.breakDownOfMaxFlow };
         } else {
             return { "message": "Cannot find maximum possible flow as there is no connection between the sink and source." };

@@ -15,3 +15,7 @@ code {
 html,body{
   height: 100%
 }
+
+.main-container{
+  margin-bottom: 11%;
+}

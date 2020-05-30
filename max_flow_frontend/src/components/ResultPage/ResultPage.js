@@ -28,7 +28,7 @@ export default class ResultPage extends Component {
             this.getResults(this.urlString, { noNodes, noEdges, edgeArray });
         } else if (option != null && option === 2) {
             const fileDetails = props.fileDetails;
-            this.urlString = "http://localhost:5000/api/file";
+            this.urlString = "http://localhost:5000/api/maxflow";
             this.getResults(this.urlString, { fileDetails });
         }
         else if (option != null && option === 3) {
