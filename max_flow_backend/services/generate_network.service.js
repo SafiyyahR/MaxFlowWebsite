@@ -7,7 +7,7 @@ exports.generate_network = function (details) {
         var no_edges = details.noEdges;
         var max_weight = details.maxWeight;
         var added_nodes = new Set();
-        var weightedGraph = new WeightedGraph(no_nodes);
+        var weightedGraph = new WeightedGraph(no_nodes,no_edges);
         var error = true;
         while (error) {
             error = false;

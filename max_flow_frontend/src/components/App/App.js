@@ -7,6 +7,7 @@ import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
 import ResultPage from '../ResultPage/ResultPage'
 import Footer from '../Footer/Footer'
+import './App.css'
 export default class App extends Component {
   render() {
     return (

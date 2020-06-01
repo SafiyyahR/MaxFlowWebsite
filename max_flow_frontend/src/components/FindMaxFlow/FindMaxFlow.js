@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { Form } from 'react-bootstrap'
+import { Form, Fade } from 'react-bootstrap'
 import { Container, Col, Row } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
+import { Link } from 'react-router-dom';
 import '../FindMaxFlow/FindMaxFlow.css'
 import '../../index.css'
+import EdgeForm from '../EdgeForm/EdgeForm'
+import NodeEdge from '../NodeEdge/NodeEdge'
 export default class FindMaxFlow extends Component {
     constructor(props) {
         super(props);
@@ -12,28 +15,37 @@ export default class FindMaxFlow extends Component {
             graphClass: "show",
             fileClass: "hide",
             randomClass: "hide",
-            graphMaxFlowBtnDis: "disabled",
-            uploadBtnDis: "disabled",
             uploadingBtnClass: "hide",
-            fileMaxFlowBtnClass: "hide",
-            randMaxFlowBtnDis: "disabled",
-            isFormValid: false,
+            uploadBtnClass: "show",
             noNodes: 0,
-            noNodesClass: "hide",
-            noNodesFeedback: "Please enter an integer.",
             noEdges: 0,
-            noEdgesClass: "hide",
-            noEdgesFeedback: "Please enter an integer.",
+            nodeEdgesValid: false,
+            edgeArray: [],
+            edgeArrayValid: false,
             txtFileClass: "hide",
-            txtFileClassFeedBack: "Please upload a file with a txt extension"
+            txtFileClassFeedBack: "Please upload a file with a txt extension.",
+            nodeEdgesGrValid: false,
+            noEdgesGr: 0,
+            noNodesGr: 0,
+            weightClass: "hide",
+            weightFeedback: "",
+            weight: 0,
+            maxWeightValid: false,
+            txtFileChosen: false,
+            noEdgesFile: 0,
+            noNodesFile: 0,
+            nodeEdgesFileValid: false,
+            edgeArrayFile: [],
+            edgeArrayFileValid: false
+
         }
-        this.endNodeFeedBackRef = React.createRef();
         this.handleOptionSelected = this.handleOptionSelected.bind(this);
-        this.validateNoNodes = this.validateNoNodes.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.validateNoEdges = this.validateNoEdges.bind(this);
-        this.validateNode = this.validateNode.bind(this);
-        this.validateWeight = this.validateWeight.bind(this);
+        this.validateMaxWeight = this.validateMaxWeight.bind(this);
+        this.getDataFromSubForm = this.getDataFromSubForm.bind(this);
+        this.getDataFromEdges = this.getDataFromEdges.bind(this);
+        this.getDataFromRand = this.getDataFromRand.bind(this);
+        this.validateFile = this.validateFile.bind(this);
+
     }
 
     handleOptionSelected(event) {
@@ -55,101 +67,199 @@ export default class FindMaxFlow extends Component {
 
     }
 
-    validateNoNodes(event) {
-        var noNodes = event.target.value;
-        if (noNodes != parseInt(noNodes)) {
-            this.setState({ noNodesFeedback: "Please enter an integer.", noNodesClass: "show", noNodes: 0 });
-        } else if (noNodes > 3 && noNodes <= 400) {
-            this.setState({ noNodes: parseInt(noNodes), noNodesClass: "hide", noNodesFeedback: "" });
-        } else if (noNodes <= 3) {
-            this.setState({ noNodesFeedback: "Please enter an integer greater than 3.", noNodesClass: "show", noNodes: 0 });
-        } else if (noNodes > 400) {
-            this.setState({ noNodesFeedback: "Please enter an integer lesser than 400.", noNodesClass: "show", noNodes: 0 });
+    validateMaxWeight(event) {
+        var weight = event.target.value;
+        var weightClass = "hide";
+        var weightFeedback = 0;
+        var maxWeightValid = false;
+        if (weight != parseInt(weight)) {
+            weightFeedback = "Please enter an integer.";
+            weightClass = "show";
+            weight = 0;
+        } else if (weight <= 0) {
+            weightFeedback = "Weight of an edge must be greater than zero.";
+            weightClass = "show";
+            weight = 0;
+        } else if (weight > 2147483647) {
+            weightFeedback = "Weight of an edge must be lesser than 2147483647.";
+            weightClass = "show";
+            weight = 0;
+        } else {
+            weightFeedback = "";
+            weightClass = "hide";
+            weight = parseInt(weight);
+            maxWeightValid = true;
         }
-        console.log(noNodes, this.state.noNodes);
+        this.setState({ weight, weightClass, weightFeedback, maxWeightValid });
     }
-    validateNode(event) {
-        var nodeVal = event.target.value;
-        if (nodeVal == 0) {
-            this.endNodeFeedBackRef.value = "The end node cannot be 0 as it is the source"
-            console.log(this.endNodeFeedBackRef.value);
-        }
-
-
-    }
-
-    validateNoEdges(event) {
-        var noEdges = event.target.value;
-        var noNodes = this.state.noNodes;
-        var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 3;
-        if (noEdges != parseInt(noEdges)) {
-            this.setState({ noEdgesFeedback: "Please enter an integer.", noEdgesClass: "show", noEdges: 0 });
-        } else if (noNodes === 0) {
-            this.setState({ noEdgesFeedback: "Please enter an integer for the number of nodes first.", noEdgesClass: "show", noEdges: 0 });
-        } else if (noEdges < noNodes) {
-            this.setState({ noEdgesFeedback: ("Please enter an integer that is greater than " + (noNodes - 1) + "."), noEdgesClass: "show", noEdges: 0 });
-        } else if (noEdges >= noNodes && noEdges <= maxNoOfEdges) {
-            this.setState({ noEdges: noEdges, noEdgesFeedback: "", noEdgesClass: "hide" });
-        } else if (noEdges > maxNoOfEdges) {
-            this.setState({ noEdgesFeedback: ("Please enter an integer less than " + maxNoOfEdges), noEdgesClass: "show", noEdges: 0 });
-        }
-        console.log(this.state.noEdges, noEdges, maxNoOfEdges, noNodes);
-    }
-    validateWeight(event) {
-        var noNodes = event.target.value;
-        if (noNodes > 3 && noNodes <= 400) {
-
+    getDataFromRand(data) {
+        console.log(data);
+        if (data && data.valid) {
+            this.setState({ noEdgesGr: data.noEdges, noNodesGr: data.noNodes, nodeEdgesGrValid: true });
+        } else {
+            this.setState({ noEdgesGr: 0, noNodesGr: 0 });
         }
     }
-    handleSubmit(event) {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        this.setState({ isFormValid: false });
-    };
 
-    componentDidMount() {
-        console.log(this.endNodeFeedBackRef.value);
+    validateFile(file) {
+        this.setState({ uploadBtnClass: "hide", uploadingBtnClass: "show" }, () => {
+            let fileData = new FileReader();
+            fileData.onloadend = this.handleFile;
+            fileData.readAsText(file);
+        });
+    }
+    handleFile = (e) => {
+        console.log(e);
+        const content = e.target.result;
+        var details = content.split("\n");
+        var noEdges = 0;
+        var noNodes = 0;
+        var nodeEdgesFileValid = false;
+        var edgeArrayFile = [];
+        var edgeArrayFileValid = false;
+        var txtFileClassFeedBack = "Insufficient details provided.";
+        var txtFileClass = "show";
+        console.log({ details });
+        if (details.length > 2) {
+            noNodes = details[0];
+            if (noNodes != parseInt(noNodes)) {
+                txtFileClassFeedBack = "Please enter an integer for the number of nodes.";
+                txtFileClass = "show";
+                noNodes = 0
+            } else if (noNodes > 3 && noNodes <= 400) {
+                txtFileClass = "hide";
+                txtFileClassFeedBack = "";
+                noNodes = parseInt(noNodes);
+            } else if (noNodes <= 3) {
+                txtFileClassFeedBack = "Please enter an integer greater than 3 for the number of nodes."
+                txtFileClass = "show";
+                noNodes = 0
+            } else if (noNodes > 400) {
+                txtFileClassFeedBack = "Please enter an integer lesser than 400 for the number of nodes.";
+                txtFileClass = "show";
+                noNodes = 0;
+            }
+            if (noNodes !== 0) {
+                noEdges = details[1];
+                var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 3;
+                txtFileClassFeedBack = "";
+                txtFileClass = "hide";
+                if (noEdges != parseInt(noEdges)) {
+                    txtFileClassFeedBack = "Please enter an integer for the number of edges.";
+                    txtFileClass = "show";
+                    noEdges = 0;
+                } else if (noNodes === 0) {
+                    txtFileClassFeedBack = "Please enter an integer for the number of nodes first for the number of edges.";
+                    txtFileClass = "show";
+                    noEdges = 0;
+                } else if (noEdges < noNodes) {
+                    txtFileClassFeedBack = "Please enter an integer that is greater than " + (noNodes - 1) + " for the number of edges.";
+                    txtFileClass = "show";
+                    noEdges = 0;
+                } else if (noEdges >= noNodes && noEdges <= maxNoOfEdges) {
+                    txtFileClassFeedBack = "";
+                    txtFileClass = "hide";
+                    noEdges = parseInt(noEdges);
+                } else if (noEdges > maxNoOfEdges) {
+                    txtFileClassFeedBack = "Please enter an integer less than " + maxNoOfEdges + " for the number of edges.";
+                    txtFileClass = "show";
+                    noEdges = 0;
+                }
+                if (noEdges != 0) {
+                    edgeArrayFileValid = true;
+                    nodeEdgesFileValid = true;
+                    for (let index = 2; index < (noEdges + 2); index++) {
+                        const row = details[index];
+                        var edge = row.split(" ");
+                        if (edge.length === 3) {
+                            var edgeValid = true;
+                            var validEdge = [];
+                            for (let index1 = 0; index1 < edge.length; index1++) {
+                                if (edge[index1] != parseInt(edge[index1])) {
+                                    edgeValid = false;
+                                    txtFileClass = "show";
+                                    txtFileClassFeedBack = "The file must only contain integers.";
+                                    edgeArrayFile = [];
+                                    edgeArrayFileValid = false;
+                                    break;
+                                } else {
+                                    validEdge.push(parseInt(edge[index1]))
+                                }
+                            }
+                            if (edgeValid) {
+                                edgeArrayFile.push(validEdge);
+                            }
+                        } else {
+                            txtFileClass = "show";
+                            txtFileClassFeedBack = "Edge " + (index - 2) + " does not have enough information.";
+                            edgeArrayFile = [];
+                            edgeArrayFileValid = false;
+                        }
+                    }
+                    if (edgeArrayFileValid) {
+                        txtFileClass = "hide";
+                        txtFileClassFeedBack = "";
+                    }
+                }
+            }
+        }
+        console.log({ txtFileClass, txtFileClassFeedBack, "noEdgesFile": noEdges, "noNodesFile": noNodes, nodeEdgesFileValid, edgeArrayFile, edgeArrayFileValid, uploadBtnClass: "show", uploadingBtnClass: "hide" });
+        this.setState({ txtFileClass, txtFileClassFeedBack, "noEdgesFile": noEdges, "noNodesFile": noNodes, nodeEdgesFileValid, edgeArrayFile, edgeArrayFileValid, uploadBtnClass: "show", uploadingBtnClass: "hide" });
+    }
+    getDataFromSubForm(data) {
+        console.log(data);
+        if (data && data.valid) {
+            this.setState({ noEdges: data.noEdges, noNodes: data.noNodes, nodeEdgesValid: true }, () => {
+                var list = [];
+                for (let index = 0; index < data.noEdges; index++) {
+                    list.push([]);
+                }
+                this.setState({ edgeArray: list });
+            });
+        } else {
+            this.setState({ noEdges: 0, noNodes: 0 }, () => {
+                var list = [];
+                for (let index = 0; index < data.noEdges; index++) {
+                    list.push([]);
+                }
+                this.setState({ edgeArray: list });
+            });
+        }
+    }
+
+    getDataFromEdges(data) {
+        var newList = this.state.edgeArray;
+        if (data && data.valid) {
+            newList[data.index] = data.edge;
+        } else {
+            newList[data.index] = [];
+        }
+        var isValid = true;
+        this.setState({ edgeArray: newList }, () => {
+            for (let index = 0; index < newList.length; index++) {
+                if (newList[index].length === 0) {
+                    isValid = false;
+                    break;
+                }
+
+            }
+            this.setState({ edgeArrayValid: isValid });
+        });
     }
     render() {
-        const { graphClass, fileClass, randomClass, uploadingBtnClass, fileMaxFlowBtnClass, randMaxFlowBtnDis, uploadBtnDis, graphMaxFlowBtnDis, isFormValid, noEdges, noNodesClass, noNodesFeedback, noEdgesClass, noEdgesFeedback, txtFileClass, txtFileClassFeedBack } = this.state;
-        console.log(graphClass, fileClass, randomClass);
+        const { noNodes, graphClass, fileClass, randomClass, uploadingBtnClass, uploadBtnClass, fileMaxFlowBtnClass, noEdges, txtFileClass, txtFileClassFeedBack, weightClass, weightFeedback } = this.state;
+        const infoDis = this.state.edgeArrayValid && this.state.nodeEdgesValid ? "" : "disabled";
+        const fileDis = this.state.edgeArrayFileValid && this.state.nodeEdgesFileValid ? "" : "disabled";
+        const graphDis = this.state.maxWeightValid && this.state.nodeEdgesGrValid ? "" : "disabled";
         if (noEdges > 0) {
             var rows = [];
             for (let index = 0; index < noEdges; index++) {
-                rows.push(<Row key={index}>
-                    <Form.Group controlId={"form-start-node" + index}>
-                        <Col className="form-label-2">
-                            <Form.Label column >Start Node {index + 1}</Form.Label>
-                        </Col>
-                        <Col >
-                            <Form.Control placeholder="0" />
-                        </Col >
-                    </Form.Group>
-                    <Form.Group controlId={"form-weight-edge" + index}>
-                        <Col className="form-label-2">
-                            <Form.Label column >Weight {index + 1}</Form.Label>
-                        </Col>
-                        <Col >
-                            <Form.Control placeholder="10" />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group controlId={"form-end-node" + index}>
-                        <Col className="form-label-2">
-                            <Form.Label column  >End Node {index + 1}</Form.Label>
-                        </Col>
-                        <Col >
-                            <Form.Control onChange={this.validateNode} placeholder="10" />
-                            <Form.Control.Feedback type="invalid" ref={ref => this.endNodeFeedBackRef = ref} className="show">
-                                {}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Row>);
+                rows.push(<EdgeForm key={index} index={index} nodes={noNodes} getData={this.getDataFromEdges} />);
             }
         }
+        const detailsInfo = { "noNodes": this.state.noNodes, "noEdges": this.state.noEdges, "edgeArray": this.state.edgeArray };
+        const detailsFile = { "noNodes": this.state.noNodesFile, "noEdges": this.state.noEdgesFile, "edgeArray": this.state.edgeArrayFile };
+        const detailsRand = { "noNodes": this.state.noNodesGr, "noEdges": this.state.noEdgesGr, "maxWeight": this.state.weight };
         return (
             < Container className="pt-5 main-container" >
                 <Row>
@@ -189,31 +299,20 @@ export default class FindMaxFlow extends Component {
                     </Col>
                 </Row>
                 <Row className={graphClass}>
-                    <Form validated={isFormValid} onSubmit={this.handleSubmit}>
+                    <Form>
                         <Col>
                             <h2>Enter Graph Information</h2>
-
-                            <Form.Group as={Row} controlId="form-no-nodes">
-                                <Form.Label column md={4}>Number of Nodes in Graph</Form.Label>
-                                <Col md={4}>
-                                    <Form.Control placeholder="6" onChange={this.validateNoNodes} />
-                                    <Form.Control.Feedback type="invalid" className={noNodesClass}>
-                                        {noNodesFeedback}
-                                    </Form.Control.Feedback></Col>
-                            </Form.Group>
-                            <Form.Group as={Row} controlId="form-no-edges">
-                                <Form.Label column md={4}>Number of Edges in Graph</Form.Label>
-                                <Col md={4}>
-                                    <Form.Control placeholder="11" onChange={this.validateNoEdges} />
-                                    <Form.Control.Feedback type="invalid" className={noEdgesClass}>
-                                        {noEdgesFeedback}
-                                    </Form.Control.Feedback>
-                                </Col>
-                            </Form.Group>
+                            <NodeEdge getData={this.getDataFromSubForm} />
                             {rows}
                             <Form.Group as={Row}>
                                 <Col>
-                                    <Button className="form-submit-btn" disabled={graphMaxFlowBtnDis}>Find Max Flow</Button>
+                                    <Link to={{
+                                        pathname: "/results",
+                                        state: {
+                                            details: detailsInfo,
+                                            option: 1
+                                        }
+                                    }}><Button className="form-submit-btn" disabled={infoDis}>Find Max Flow</Button></Link>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -221,22 +320,26 @@ export default class FindMaxFlow extends Component {
                     </Form>
                 </Row>
                 <Row className={fileClass}>
-                    <Form validated={isFormValid} onSubmit={this.handleSubmit}>
+                    <Form>
                         <Col>
                             <h2>Upload<Button className="upld-file-format"><h2><u>File</u></h2></Button>with graph information</h2>
                             <Form.Group >
-                                <Form.File id="form-upload-file" >
-                                    <Form.File.Input accept=".txt" onChange={this.validateFile} />
+                                <Form.File className={uploadBtnClass} id="form-upload-file" custom>
+                                    <Form.File.Input onChange={e =>
+                                        this.validateFile(e.target.files[0])} accept=".txt" />
+                                    <Form.File.Label data-browse="Upload File">
+                                        flow.txt
+                                    </Form.File.Label>
                                 </Form.File>
                                 <Form.Control.Feedback type="invalid" className={txtFileClass}>
                                     {txtFileClassFeedBack}
                                 </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group as={Row} >
+                            {/* <Form.Group className={uploadBtnClass} as={Row} >
                                 <Col>
-                                    <Button className="form-submit-btn" disabled={uploadBtnDis}>Upload File</Button>
+                                    <Button className="form-submit-btn">Upload File</Button>
                                 </Col>
-                            </Form.Group>
+                            </Form.Group> */}
                             <Form.Group className={uploadingBtnClass}>
                                 <Button variant="primary" disabled>
                                     <Spinner
@@ -251,7 +354,13 @@ export default class FindMaxFlow extends Component {
                             </Form.Group>
                             <Form.Group as={Row} className={fileMaxFlowBtnClass}>
                                 <Col>
-                                    <Button className="form-submit-btn">Find Max Flow</Button>
+                                    <Link to={{
+                                        pathname: "/results",
+                                        state: {
+                                            details: detailsFile,
+                                            option: 2
+                                        }
+                                    }}><Button className="form-submit-btn" disabled={fileDis}>Find Max Flow</Button></Link>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -259,28 +368,28 @@ export default class FindMaxFlow extends Component {
                     </Form>
                 </Row>
                 <Row className={randomClass}>
-                    <Form validated={isFormValid} onSubmit={this.handleSubmit}>
+                    <Form>
                         <Col>
                             <h2>Enter information of graph to be generated </h2>
-
-                            <Form.Group as={Row} controlId="form-no-nodes-gr">
-                                <Form.Label column md={4}>Number of Nodes in Graph</Form.Label>
-                                <Col md={4}>
-                                    <Form.Control placeholder="6" /></Col>
-                            </Form.Group>
-                            <Form.Group as={Row} controlId="form-no-edges-gr">
-                                <Form.Label column md={4}>Number of Edges in Graph</Form.Label>
-                                <Col md={4}>
-                                    <Form.Control placeholder="5" /></Col>
-                            </Form.Group>
-                            <Form.Group as={Row} controlId="form-max-weight-gr">
-                                <Form.Label column md={4}>Max weight of edge</Form.Label>
-                                <Col md={4}>
-                                    <Form.Control placeholder="5" /></Col>
+                            <NodeEdge getData={this.getDataFromRand} />
+                            <Form.Group as={Row} controlId={"form-max-weight"}>
+                                <Form.Label column md={4} >Max Weight of an Edge</Form.Label>
+                                <Col md={4} >
+                                    <Form.Control onChange={this.validateMaxWeight} placeholder="10" />
+                                    <Form.Control.Feedback type="invalid" className={weightClass}>
+                                        {weightFeedback}
+                                    </Form.Control.Feedback>
+                                </Col>
                             </Form.Group>
                             <Form.Group as={Row}>
                                 <Col>
-                                    <Button className="form-submit-btn" disabled={randMaxFlowBtnDis}>Find Max Flow</Button>
+                                    <Link to={{
+                                        pathname: "/results",
+                                        state: {
+                                            details: detailsRand,
+                                            option: 3
+                                        }
+                                    }}><Button className="form-submit-btn" disabled={graphDis}>Find Max Flow</Button></Link>
                                 </Col>
                             </Form.Group>
                         </Col>

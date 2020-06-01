@@ -5,12 +5,13 @@ export default class ErrorPage extends Component {
 
     constructor(props) {
         super(props)
-        const errMessage = props.message;
-        this.state = {
-            message: "404 Page Not Found"
+        const errMessage = this.props.message;
+        if (errMessage == null) {
+            errMessage = "404 Page Not Found";
         }
-        if (errMessage != null) {
-            this.setState({ message: errMessage });
+        console.log(errMessage);
+        this.state = {
+            message: errMessage
         }
     }
     render() {
@@ -27,7 +28,7 @@ export default class ErrorPage extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col className='text-center mt-2'><h2>{message}</h2></Col>
+                    <Col className='text-center mt-5'><h2>{message}</h2></Col>
                 </Row>
                 <Row>
                     <Col className='text-center mt-2'><h3>Go back to the home <a href="/">page</a></h3></Col>

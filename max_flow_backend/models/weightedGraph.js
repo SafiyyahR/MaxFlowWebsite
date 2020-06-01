@@ -1,9 +1,10 @@
 var Edge = require('./edge');
 module.exports = class WeightedGraph {
-    constructor(nodes) {
+    constructor(nodes, edges) {
         this.START_NODE = 0;
         this.FALSE_EDGE = new Edge(0, 0, 0);
         this.nodes = nodes;
+        this.edges = edges;
         this.linkedAdjacencyList = [];
         this.resLinkedAdjacencyList = [];
         this.residualLinkedList = [];
@@ -87,6 +88,14 @@ module.exports = class WeightedGraph {
             return false;
         }
     }
+    addWeightedEdgeToRes(start, weight, end) {
+        var edge = new Edge(start, weight, end);
+        var innerArr = this.resLinkedAdjacencyList[start];
+        innerArr.push(edge);
+        this.resLinkedAdjacencyList[start] = innerArr;
+        return false;
+    }
+
     printWeightedGraph(linkedList) {
         for (let index = 0; index < linkedList.length; index++) {
             var list = linkedList[index];
@@ -171,6 +180,7 @@ module.exports = class WeightedGraph {
         this.breakDownOfMaxFlow = [];
         //clone the linkedAdjacencyList to residualLinkedList
         this.setLinkedList(this.residualLinkedList, this.linkedAdjacencyList);
+        this.setLinkedList(this.resLinkedAdjacencyList, this.residualLinkedList);
         //initially the max flow is zero
         var max_flow = 0;
         //declaring the start and end variable
@@ -200,16 +210,23 @@ module.exports = class WeightedGraph {
                 //once the edge is found then the weight is subtracted by the path_flow
                 var foundEdge = this.findEdge(start, end, this.residualLinkedList);
                 foundEdge.weight = foundEdge.weight - path_flow;
+                foundEdge = this.findEdge(start, end, this.resLinkedAdjacencyList);
+                foundEdge.weight = foundEdge.weight - path_flow;
+                foundEdge = this.findEdge(end, start, this.resLinkedAdjacencyList);
+                if (foundEdge != null && foundEdge == this.FALSE_EDGE) {
+                    this.addWeightedEdgeToRes(end, path_flow, start);
+                } else {
+                    foundEdge.weight = foundEdge.weight + path_flow;
+                }
             }
             //the path_flow is add to the max_flow
             max_flow += path_flow;
         }
         if (max_flow != 0) {
             //the result graph is found which gives the max flow
-            this.setLinkedList(this.resLinkedAdjacencyList, this.residualLinkedList);
             this.setLinkedList(this.masterLinkedList, this.linkedAdjacencyList);
             this.findLinkedListResult();
-            return { "source": 0, "sink": this.nodes - 1, max_flow, "residual": this.resLinkedAdjacencyList, "result": this.resultLinkedList, "original": this.masterLinkedList, "breakDownOfFlow": this.breakDownOfMaxFlow };
+            return { "sent": true, "source": 0, "sink": this.nodes - 1, edges: this.edges, "maxFlow": max_flow, "residual": this.resLinkedAdjacencyList, "result": this.resultLinkedList, "original": this.masterLinkedList, "breakDownOfFlow": this.breakDownOfMaxFlow };
         } else {
             return { "message": "Cannot find maximum possible flow as there is no connection between the sink and source." };
         }

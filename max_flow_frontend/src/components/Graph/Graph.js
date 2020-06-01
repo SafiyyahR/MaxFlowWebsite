@@ -27,8 +27,8 @@ export default class Graph extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            elements: {},
-            style: {},
+            elements: props.elements,
+            style: props.style,
             stylesheet: [
                 {
                     selector: 'node',
@@ -55,11 +55,9 @@ export default class Graph extends Component {
                 }
             ],
             minZoom: 0.5,
-            maxZoon: 2.0
+            maxZoom: 1.5
 
         };
-        this.setState({ elements: props.elements });
-        this.setState({ style: props.style });
     }
 
     render() {

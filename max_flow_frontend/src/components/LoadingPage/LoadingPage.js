@@ -6,7 +6,7 @@ export default class LoadingPage extends Component {
 
     render() {
         return (
-            <div class="center-div text-center">
+            <div className="center-div text-center">
 
                 <Spinner animation="border" className="loading-spinner" />
 
