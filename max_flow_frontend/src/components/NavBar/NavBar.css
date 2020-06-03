@@ -13,13 +13,17 @@
 }
 .custom-link, .nav-link{
     color: black !important;
+    margin-right: 20px;
+    text-decoration: none;
+}
+.custom-link-icon{
     margin-right: 5px !important;
     text-decoration: none;
 }
+
 .active{
     color: white !important;
     text-decoration: none;
-    margin-right: 5px !important;
 }
 
 a:hover{

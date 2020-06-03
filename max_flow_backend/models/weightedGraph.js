@@ -100,6 +100,7 @@ module.exports = class WeightedGraph {
         for (let index = 0; index < linkedList.length; index++) {
             var list = linkedList[index];
             for (let index1 = 0; index1 < list.length; index1++) {
+                console.log(list[index1]);
             }
 
         }

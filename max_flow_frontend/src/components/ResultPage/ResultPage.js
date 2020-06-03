@@ -5,13 +5,14 @@ import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
 import '../ResultPage/ResultPage.css'
 import Button from 'react-bootstrap/Button'
+import { Helmet } from 'react-helmet'
 export default class ResultPage extends Component {
-    TITLE = "Results | MX flow"
+    title = "Results | MX flow"
     urlString = "";
     constructor(props) {
         super(props);
         this.state = {
-            error: {},
+            error: { message: "" },
             isLoaded: false,
             inputElements: [],
             residualElements: [],
@@ -23,8 +24,12 @@ export default class ResultPage extends Component {
             noEdges: 0,
             originalGraph: []
         };
-        var option = this.props.location.state.option;
-        var details = this.props.location.state.details;
+        var option = 4;
+        console.log(this.props.location.state);
+        if (this.props.location.state != null) {
+            option = this.props.location.state.option;
+            var details = this.props.location.state.details;
+        }
         console.log(option, details);
         if (option != null && (option === 1 || option === 2)) {
             this.urlString = "http://localhost:5000/api/maxflow";
@@ -33,8 +38,12 @@ export default class ResultPage extends Component {
             this.urlString = "http://localhost:5000/api/random";
             this.getResults(this.urlString, details);
         } else {
-            const errorMessage = "Option selected is invalid.";
-            this.setState({ error: errorMessage });
+            const errorMessage = "Input graph not provided";
+            this.state.error = { message: errorMessage };
+            this.state.isLoaded = true;
+            // this.setState({ error: { message: errorMessage }, isLoaded: true }, () => {
+            //     console.log(this.state.error);
+            // });
         }
         console.log("this.urlString", this.urlString);
         this.handleResultsSuccess = this.handleResultsSuccess.bind(this);
@@ -150,7 +159,26 @@ export default class ResultPage extends Component {
             if (maxWidth < 500) {
                 width = 500;
             }
-            this.setState({ noNodes, noEdges, inputElements, residualElements, resultElements, flowBreakDown: result.breakDownOfFlow, maxFlow: result.maxFlow, isLoaded: true, style: { "border": "1px solid black", "width": width, "height": maxWidth }, originalGraph: result.original }, () => {
+            var breakDownFlow = [];
+            console.log(result.breakDownOfFlow);
+            for (let index = 0; index < result.breakDownOfFlow.length; index++) {
+                const outerList = result.breakDownOfFlow[index];
+                console.log(outerList);
+                var indexOfSource = outerList.indexOf(0);
+                console.log(indexOfSource);
+                var row = "";
+                for (let i = indexOfSource; i >= 0; i--) {
+                    row += outerList[i];
+                    if (i === 0) {
+                        row += " = ";
+                    } else {
+                        row += " –> ";
+                    }
+                }
+                row += outerList[(outerList.length - 1)];
+                breakDownFlow.push(row);
+            }
+            this.setState({ noNodes, noEdges, inputElements, residualElements, resultElements, flowBreakDown: breakDownFlow, maxFlow: result.maxFlow, isLoaded: true, style: { "border": "1px solid black", "width": width, "height": maxWidth }, originalGraph: result.original }, () => {
                 console.log(this.state);
             });
         } else {
@@ -173,7 +201,6 @@ export default class ResultPage extends Component {
                 txtContent += row;
             }
         }
-        console.log(txtContent);
         const element = document.createElement("a");
         const file = new Blob([txtContent], { type: 'text/plain' });
         element.href = URL.createObjectURL(file);
@@ -182,40 +209,51 @@ export default class ResultPage extends Component {
     }
     render() {
         const { error, isLoaded, inputElements, residualElements, resultElements, flowBreakDown, maxFlow, style } = this.state;
-        if (error && error.message) {
+        console.log(error, isLoaded);
+        if (error && error.message != "") {
             return <ErrorPage message={error.message} />
         } else if (!isLoaded) {
             return <LoadingPage />
         } else {
             return (
-                <Container className="container-results">
+                <Container className="container-results" md={10}>
+                    <Helmet>
+                        <title>{this.title}</title>
+                        <link rel="icon" href="images/logo.png" sizes="16x16"></link>
+                    </Helmet>
                     <Row className="pt-5">
-                        <Col>
-                            <h3>Max Flow is <b>{maxFlow}</b></h3>
+                        <Col lg={{ span: 8, offset: 2 }}>
+                            <p>The maximum flow for the below graph is <b>{maxFlow}</b></p>
+                            <p>Source - 0</p>
+                            <p>Sink - {this.state.noNodes}</p>
                         </Col>
                     </Row>
                     <Row >
-                        <Col>
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Input Graph</h2>
                             <Graph elements={inputElements} style={style} />
                             <Button className="mt-3" onClick={this.downloadtxt} >Download Input Graph as a txt file</Button>
                         </Col>
                     </Row>
                     <Row className="pt-5">
-                        <Col>
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Result Graph</h2>
                             <Graph elements={resultElements} style={style} />
                         </Col>
                     </Row>
                     <Row className="pt-5">
-                        <Col>
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Residual Graph</h2>
                             <Graph elements={residualElements} style={style} />
                         </Col>
                     </Row>
-                    <Row className="pt-5">
-                        <Col>
+                    <Row className="pt-5 pb-5">
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Break Down of flow</h2>
+
+                            {flowBreakDown && flowBreakDown.map((item, index) => (
+                                <p><b>{index + 1}.</b>&nbsp;{item}</p>
+                            ))}
                         </Col>
                     </Row>
 

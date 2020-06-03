@@ -1,0 +1,10 @@
+ol.pseudocode {
+    counter-reset: item
+}
+ol.pseudocode li {
+    display: block
+}
+ol.pseudocode li:before {
+    content: counters(item, ".") " ";
+    counter-increment: item
+}

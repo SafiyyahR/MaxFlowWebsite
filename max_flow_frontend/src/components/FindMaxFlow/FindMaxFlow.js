@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Fade } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { Container, Col, Row } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
@@ -8,10 +8,14 @@ import '../FindMaxFlow/FindMaxFlow.css'
 import '../../index.css'
 import EdgeForm from '../EdgeForm/EdgeForm'
 import NodeEdge from '../NodeEdge/NodeEdge'
+import { Helmet } from 'react-helmet'
+import FileModal from '../FileModal/FileModal'
 export default class FindMaxFlow extends Component {
+    title = "Find Max Flow | MX flow"
     constructor(props) {
         super(props);
         this.state = {
+            showModal: false,
             graphClass: "show",
             fileClass: "hide",
             randomClass: "hide",
@@ -45,7 +49,8 @@ export default class FindMaxFlow extends Component {
         this.getDataFromEdges = this.getDataFromEdges.bind(this);
         this.getDataFromRand = this.getDataFromRand.bind(this);
         this.validateFile = this.validateFile.bind(this);
-
+        this.setShowModal = this.setShowModal.bind(this);
+        this.openModal = this.openModal.bind(this);
     }
 
     handleOptionSelected(event) {
@@ -126,7 +131,7 @@ export default class FindMaxFlow extends Component {
                 txtFileClassFeedBack = "Please enter an integer for the number of nodes.";
                 txtFileClass = "show";
                 noNodes = 0
-            } else if (noNodes > 3 && noNodes <= 400) {
+            } else if (noNodes > 3 && noNodes <= 100) {
                 txtFileClass = "hide";
                 txtFileClassFeedBack = "";
                 noNodes = parseInt(noNodes);
@@ -134,14 +139,14 @@ export default class FindMaxFlow extends Component {
                 txtFileClassFeedBack = "Please enter an integer greater than 3 for the number of nodes."
                 txtFileClass = "show";
                 noNodes = 0
-            } else if (noNodes > 400) {
-                txtFileClassFeedBack = "Please enter an integer lesser than 400 for the number of nodes.";
+            } else if (noNodes > 100) {
+                txtFileClassFeedBack = "Please enter an integer lesser than 100 for the number of nodes.";
                 txtFileClass = "show";
                 noNodes = 0;
             }
             if (noNodes !== 0) {
                 noEdges = details[1];
-                var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 3;
+                var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 2;
                 txtFileClassFeedBack = "";
                 txtFileClass = "hide";
                 if (noEdges != parseInt(noEdges)) {
@@ -246,8 +251,20 @@ export default class FindMaxFlow extends Component {
             this.setState({ edgeArrayValid: isValid });
         });
     }
+
+    openModal(event) {
+        console.log(event);
+        this.setShowModal(true);
+    }
+    setShowModal(choice) {
+        this.setState({ showModal: choice }, () => {
+            console.log(this.state.showModal);
+        });
+    }
+
+
     render() {
-        const { noNodes, graphClass, fileClass, randomClass, uploadingBtnClass, uploadBtnClass, fileMaxFlowBtnClass, noEdges, txtFileClass, txtFileClassFeedBack, weightClass, weightFeedback } = this.state;
+        const { noNodes, graphClass, fileClass, randomClass, uploadingBtnClass, uploadBtnClass, fileMaxFlowBtnClass, noEdges, txtFileClass, txtFileClassFeedBack, weightClass, weightFeedback, showModal } = this.state;
         const infoDis = this.state.edgeArrayValid && this.state.nodeEdgesValid ? "" : "disabled";
         const fileDis = this.state.edgeArrayFileValid && this.state.nodeEdgesFileValid ? "" : "disabled";
         const graphDis = this.state.maxWeightValid && this.state.nodeEdgesGrValid ? "" : "disabled";
@@ -262,8 +279,12 @@ export default class FindMaxFlow extends Component {
         const detailsRand = { "noNodes": this.state.noNodesGr, "noEdges": this.state.noEdgesGr, "maxWeight": this.state.weight };
         return (
             < Container className="pt-5 main-container" >
+                <Helmet>
+                    <title>{this.title}</title>
+                    <link rel="icon" href="images/logo.png" sizes="16x16"></link>
+                </Helmet>
                 <Row>
-                    <Col>
+                    <Col lg={{ span: 8, offset: 2 }}>
                         <h2>Find Max Flow</h2>
                         <Form>
                             <fieldset>
@@ -300,7 +321,7 @@ export default class FindMaxFlow extends Component {
                 </Row>
                 <Row className={graphClass}>
                     <Form>
-                        <Col>
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Enter Graph Information</h2>
                             <NodeEdge getData={this.getDataFromSubForm} />
                             {rows}
@@ -321,13 +342,18 @@ export default class FindMaxFlow extends Component {
                 </Row>
                 <Row className={fileClass}>
                     <Form>
-                        <Col>
-                            <h2>Upload<Button className="upld-file-format"><h2><u>File</u></h2></Button>with graph information</h2>
+                        <Col lg={{ span: 8, offset: 2 }}>
+                            <h2>Upload<Button onClick={this.openModal} className="upld-file-format"><h2><u>File</u></h2></Button>
+                                <FileModal
+                                    show={showModal}
+                                    onHide={this.setShowModal}
+                                />
+                                  with graph information</h2>
                             <Form.Group >
                                 <Form.File className={uploadBtnClass} id="form-upload-file" custom>
-                                    <Form.File.Input onChange={e =>
+                                    <Form.File.Input className="col-md-4" onChange={e =>
                                         this.validateFile(e.target.files[0])} accept=".txt" />
-                                    <Form.File.Label data-browse="Upload File">
+                                    <Form.File.Label className="col-md-4" data-browse="Upload File">
                                         flow.txt
                                     </Form.File.Label>
                                 </Form.File>
@@ -335,11 +361,6 @@ export default class FindMaxFlow extends Component {
                                     {txtFileClassFeedBack}
                                 </Form.Control.Feedback>
                             </Form.Group>
-                            {/* <Form.Group className={uploadBtnClass} as={Row} >
-                                <Col>
-                                    <Button className="form-submit-btn">Upload File</Button>
-                                </Col>
-                            </Form.Group> */}
                             <Form.Group className={uploadingBtnClass}>
                                 <Button variant="primary" disabled>
                                     <Spinner
@@ -369,7 +390,7 @@ export default class FindMaxFlow extends Component {
                 </Row>
                 <Row className={randomClass}>
                     <Form>
-                        <Col>
+                        <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Enter information of graph to be generated </h2>
                             <NodeEdge getData={this.getDataFromRand} />
                             <Form.Group as={Row} controlId={"form-max-weight"}>

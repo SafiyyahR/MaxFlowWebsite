@@ -31,7 +31,7 @@ export default class NodeEdge extends Component {
             noNodesFeedback = "Please enter an integer.";
             noNodesClass = "show";
             noNodes = 0
-        } else if (noNodes > 3 && noNodes <= 400) {
+        } else if (noNodes > 3 && noNodes <= 100) {
             noNodesClass = "hide";
             noNodesFeedback = "";
             noNodes = parseInt(noNodes);
@@ -39,8 +39,8 @@ export default class NodeEdge extends Component {
             noNodesFeedback = "Please enter an integer greater than 3."
             noNodesClass = "show";
             noNodes = 0
-        } else if (noNodes > 400) {
-            noNodesFeedback = "Please enter an integer lesser than 400.";
+        } else if (noNodes > 100) {
+            noNodesFeedback = "Please enter an integer lesser than 100.";
             noNodesClass = "show";
             noNodes = 0;
         }
@@ -61,7 +61,7 @@ export default class NodeEdge extends Component {
             noEdges = this.state.noEdges;
         }
         var noNodes = this.state.noNodes;
-        var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 3;
+        var maxNoOfEdges = (noNodes * noNodes) - (3 * noNodes) + 2;
         var noEdgesFeedback = "";
         var noEdgesClass = "hide";
         if (noEdges != parseInt(noEdges)) {
