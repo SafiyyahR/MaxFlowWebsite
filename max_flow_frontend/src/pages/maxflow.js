@@ -340,7 +340,7 @@ export default class MaxFlow extends Component {
                             <GraphForm getData={this.getDataFromSubForm} />
                             {rows}
                             <Form.Group as={Row}>
-                                <Col>
+                                <Col className="mt-3">
                                     <Link to={{
                                         pathname: "/results",
                                         state: {
