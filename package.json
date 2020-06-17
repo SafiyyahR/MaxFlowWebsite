@@ -1,0 +1,34 @@
+{
+  "name": "max-flow",
+  "version": "1.0.0",
+  "description": "\"Website used to calculate the max flow of a network\"",
+  "scripts": {
+    "start": "node ./max_flow_backend/bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-prebuild": "echo This runs before Heroku installs your dependencies.",
+    "heroku-postbuild": "echo This runs afterwards."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SafiyyahR/MaxFlowWebsite.git"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.4",
+    "pug": "^2.0.4"
+  },
+  "engines": {
+    "node": "10.16.3"
+  },
+  "author": "Safiyyah Thur Rahman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SafiyyahR/MaxFlowWebsite/issues"
+  },
+  "homepage": "https://github.com/SafiyyahR/MaxFlowWebsite#readme"
+}
