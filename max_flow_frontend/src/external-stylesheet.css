@@ -1,0 +1,67 @@
+.form-submit-btn {
+    background-color: #4c96d7;
+    color: black;
+}
+
+.form-label-2 {
+    padding: 0 !important;
+}
+
+.upld-file-format {
+    font-size: 2rem !important;
+    border: none !important;
+    text-align: center !important;
+    display: inline-block !important;
+    cursor: pointer !important;
+    background-color: white !important;
+    color: #212529 !important;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.invalid-feedback {
+    height: 10% !important;
+}
+
+ol.pseudocode {
+    counter-reset: item
+}
+
+ol.pseudocode li {
+    display: block
+}
+
+ol.pseudocode li:before {
+    content: counters(item, ".") " ";
+    counter-increment: item
+}
+
+.center-div {
+    color: black;
+    width: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 20px;
+    resize: both;
+    overflow: auto;
+}
+
+.loading-spinner {
+    color: #4c96d7 !important;
+}
+
+.container-results {
+    overflow: auto;
+}
+
+ol {
+    list-style-type: number;
+}

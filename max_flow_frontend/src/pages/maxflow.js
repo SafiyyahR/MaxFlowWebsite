@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-import { Form } from 'react-bootstrap'
-import { Container, Col, Row } from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
-import Spinner from 'react-bootstrap/Spinner'
+import { Container, Col, Row, Button, Spinner, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
-import '../FindMaxFlow/FindMaxFlow.css'
-import '../../index.css'
-import EdgeForm from '../EdgeForm/EdgeForm'
-import NodeEdge from '../NodeEdge/NodeEdge'
-import { Helmet } from 'react-helmet'
-import FileModal from '../FileModal/FileModal'
-export default class FindMaxFlow extends Component {
+import '../external-stylesheet.css'
+import Title from '../components/title'
+import GraphForm from '../components/graph-form'
+import CustomModal from '../components/custom-modal';
+import EdgeForm from '../components/edge-form'
+export default class MaxFlow extends Component {
     title = "Find Max Flow | MX flow"
     constructor(props) {
         super(props);
@@ -54,7 +50,6 @@ export default class FindMaxFlow extends Component {
     }
 
     handleOptionSelected(event) {
-        console.log("value", event.target.value);
         var value = event.target.value;
         if (value && value === "1") {
             this.setState({ graphClass: "show" });
@@ -98,7 +93,6 @@ export default class FindMaxFlow extends Component {
         this.setState({ weight, weightClass, weightFeedback, maxWeightValid });
     }
     getDataFromRand(data) {
-        console.log(data);
         if (data && data.valid) {
             this.setState({ noEdgesGr: data.noEdges, noNodesGr: data.noNodes, nodeEdgesGrValid: true });
         } else {
@@ -114,7 +108,6 @@ export default class FindMaxFlow extends Component {
         });
     }
     handleFile = (e) => {
-        console.log(e);
         const content = e.target.result;
         var details = content.split("\n");
         var noEdges = 0;
@@ -124,7 +117,6 @@ export default class FindMaxFlow extends Component {
         var edgeArrayFileValid = false;
         var txtFileClassFeedBack = "Insufficient details provided.";
         var txtFileClass = "show";
-        console.log({ details });
         if (details.length > 2) {
             noNodes = details[0];
             if (noNodes != parseInt(noNodes)) {
@@ -208,11 +200,9 @@ export default class FindMaxFlow extends Component {
                 }
             }
         }
-        console.log({ txtFileClass, txtFileClassFeedBack, "noEdgesFile": noEdges, "noNodesFile": noNodes, nodeEdgesFileValid, edgeArrayFile, edgeArrayFileValid, uploadBtnClass: "show", uploadingBtnClass: "hide" });
         this.setState({ txtFileClass, txtFileClassFeedBack, "noEdgesFile": noEdges, "noNodesFile": noNodes, nodeEdgesFileValid, edgeArrayFile, edgeArrayFileValid, uploadBtnClass: "show", uploadingBtnClass: "hide" });
     }
     getDataFromSubForm(data) {
-        console.log(data);
         if (data && data.valid) {
             this.setState({ noEdges: data.noEdges, noNodes: data.noNodes, nodeEdgesValid: true }, () => {
                 var list = [];
@@ -253,13 +243,10 @@ export default class FindMaxFlow extends Component {
     }
 
     openModal(event) {
-        console.log(event);
         this.setShowModal(true);
     }
     setShowModal(choice) {
-        this.setState({ showModal: choice }, () => {
-            console.log(this.state.showModal);
-        });
+        this.setState({ showModal: choice });
     }
 
 
@@ -277,12 +264,10 @@ export default class FindMaxFlow extends Component {
         const detailsInfo = { "noNodes": this.state.noNodes, "noEdges": this.state.noEdges, "edgeArray": this.state.edgeArray };
         const detailsFile = { "noNodes": this.state.noNodesFile, "noEdges": this.state.noEdgesFile, "edgeArray": this.state.edgeArrayFile };
         const detailsRand = { "noNodes": this.state.noNodesGr, "noEdges": this.state.noEdgesGr, "maxWeight": this.state.weight };
+        const screenHeight = window.screen.height + "px";
         return (
-            < Container className="pt-5 main-container" >
-                <Helmet>
-                    <title>{this.title}</title>
-                    <link rel="icon" href="images/logo.png" sizes="16x16"></link>
-                </Helmet>
+            < Container style={{ minHeight: screenHeight }} className="pt-5" >
+                <Title title={this.title} />
                 <Row>
                     <Col lg={{ span: 8, offset: 2 }}>
                         <h2>Find Max Flow</h2>
@@ -323,7 +308,7 @@ export default class FindMaxFlow extends Component {
                     <Form>
                         <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Enter Graph Information</h2>
-                            <NodeEdge getData={this.getDataFromSubForm} />
+                            <GraphForm getData={this.getDataFromSubForm} />
                             {rows}
                             <Form.Group as={Row}>
                                 <Col>
@@ -344,7 +329,7 @@ export default class FindMaxFlow extends Component {
                     <Form>
                         <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Upload<Button onClick={this.openModal} className="upld-file-format"><h2><u>File</u></h2></Button>
-                                <FileModal
+                                <CustomModal
                                     show={showModal}
                                     onHide={this.setShowModal}
                                 />
@@ -392,7 +377,7 @@ export default class FindMaxFlow extends Component {
                     <Form>
                         <Col lg={{ span: 8, offset: 2 }}>
                             <h2>Enter information of graph to be generated </h2>
-                            <NodeEdge getData={this.getDataFromRand} />
+                            <GraphForm getData={this.getDataFromRand} />
                             <Form.Group as={Row} controlId={"form-max-weight"}>
                                 <Form.Label column md={4} >Max Weight of an Edge</Form.Label>
                                 <Col md={4} >

@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Container, Col, Row } from 'react-bootstrap'
-import Graph from '../Graph/Graph'
-import ErrorPage from '../ErrorPage/ErrorPage'
-import LoadingPage from '../LoadingPage/LoadingPage'
-import '../ResultPage/ResultPage.css'
-import Button from 'react-bootstrap/Button'
-import { Helmet } from 'react-helmet'
-export default class ResultPage extends Component {
+import { Container, Col, Row, Button } from 'react-bootstrap'
+import '../external-stylesheet.css'
+import Title from '../components/title'
+import Error from './404'
+import Loading from './loading'
+import Graph from '../components/graph-template'
+export default class Results extends Component {
     title = "Results | MX flow"
     urlString = "";
     constructor(props) {
@@ -25,12 +24,10 @@ export default class ResultPage extends Component {
             originalGraph: []
         };
         var option = 4;
-        console.log(this.props.location.state);
         if (this.props.location.state != null) {
             option = this.props.location.state.option;
             var details = this.props.location.state.details;
         }
-        console.log(option, details);
         if (option != null && (option === 1 || option === 2)) {
             this.urlString = "http://localhost:5000/api/maxflow";
             this.getResults(this.urlString, details);
@@ -41,18 +38,13 @@ export default class ResultPage extends Component {
             const errorMessage = "Input graph not provided";
             this.state.error = { message: errorMessage };
             this.state.isLoaded = true;
-            // this.setState({ error: { message: errorMessage }, isLoaded: true }, () => {
-            //     console.log(this.state.error);
-            // });
         }
-        console.log("this.urlString", this.urlString);
         this.handleResultsSuccess = this.handleResultsSuccess.bind(this);
         this.downloadtxt = this.downloadtxt.bind(this);
 
     }
 
     getResults(urlString, details) {
-        console.log(details);
         fetch(urlString, {
             method: "POST",
             body: JSON.stringify(details),
@@ -61,7 +53,6 @@ export default class ResultPage extends Component {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    console.log(result);
                     this.handleResultsSuccess(result);
                 },
                 (error) => {
@@ -71,9 +62,7 @@ export default class ResultPage extends Component {
     }
     //Checks if the results have been fetched
     handleResultsSuccess(result) {
-        console.log("item", result);
         if (result && result.sent) {
-            console.log(result.original);
             var noNodes = result.sink + 1;
             var noEdges = result.edges;
             var inputElements = [];
@@ -81,11 +70,10 @@ export default class ResultPage extends Component {
             var resultElements = [];
             var nodesPerRow = Math.ceil(Math.sqrt(noNodes));
             var maxWidth = nodesPerRow * 100;
-            console.log(maxWidth);
             var xpos = 50;
             var ypos = -50;
             for (let index = 0; index < noNodes; index++) {
-                if ((index % nodesPerRow) == 0) {
+                if ((index % nodesPerRow) === 0) {
                     ypos += 100;
                     xpos = 50
                 } else {
@@ -114,58 +102,54 @@ export default class ResultPage extends Component {
                     if (edge.end === noNodes - 1) {
                         sinkName = "sink"
                     }
-                    var data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
+                    data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
                     inputElements.push(data);
                 }
             }
             for (let index = 0; index < result.residual.length; index++) {
-                var array = result.residual[index];
+                array = result.residual[index];
                 for (let index = 0; index < array.length; index++) {
-                    var edge = array[index];
-                    var sourceName = edge.start;
+                    edge = array[index];
+                    sourceName = edge.start;
                     if (edge.start === 0) {
                         sourceName = "source";
                     } else if (edge.start === noNodes - 1) {
                         sourceName = "sink";
                     }
-                    var sinkName = edge.end;
+                    sinkName = edge.end;
                     if (edge.end === noNodes - 1) {
                         sinkName = "sink"
                     } else if (edge.end === 0) {
                         sinkName = "source";
                     }
-                    var data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
+                    data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
                     residualElements.push(data);
                 }
             }
             for (let index = 0; index < result.result.length; index++) {
-                var array = result.result[index];
+                array = result.result[index];
                 for (let index = 0; index < array.length; index++) {
-                    var edge = array[index];
-                    var sourceName = edge.start;
+                    edge = array[index];
+                    sourceName = edge.start;
                     if (edge.start === 0) {
                         sourceName = "source";
                     }
-                    var sinkName = edge.end;
+                    sinkName = edge.end;
                     if (edge.end === noNodes - 1) {
                         sinkName = "sink"
                     }
-                    var data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
+                    data = { "data": { "source": sourceName, "target": sinkName, "label": edge.weight } }
                     resultElements.push(data);
                 }
             }
-            console.log(this.state);
             var width = maxWidth;
             if (maxWidth < 500) {
                 width = 500;
             }
             var breakDownFlow = [];
-            console.log(result.breakDownOfFlow);
             for (let index = 0; index < result.breakDownOfFlow.length; index++) {
                 const outerList = result.breakDownOfFlow[index];
-                console.log(outerList);
                 var indexOfSource = outerList.indexOf(0);
-                console.log(indexOfSource);
                 var row = "";
                 for (let i = indexOfSource; i >= 0; i--) {
                     row += outerList[i];
@@ -178,13 +162,9 @@ export default class ResultPage extends Component {
                 row += outerList[(outerList.length - 1)];
                 breakDownFlow.push(row);
             }
-            this.setState({ noNodes, noEdges, inputElements, residualElements, resultElements, flowBreakDown: breakDownFlow, maxFlow: result.maxFlow, isLoaded: true, style: { "border": "1px solid black", "width": width, "height": maxWidth }, originalGraph: result.original }, () => {
-                console.log(this.state);
-            });
+            this.setState({ noNodes, noEdges, inputElements, residualElements, resultElements, flowBreakDown: breakDownFlow, maxFlow: result.maxFlow, isLoaded: true, style: { "border": "1px solid black", "width": width, "height": maxWidth }, originalGraph: result.original });
         } else {
-            this.setState({ noEdges: 0, noNodes: 0, inputElements: [], residualElements: [], resultElements: [], flowBreakDown: [], maxFlow: 0, isLoaded: true, error: { message: result.message }, originalGraph: [] }, () => {
-                console.log(this.state.error);
-            });
+            this.setState({ noEdges: 0, noNodes: 0, inputElements: [], residualElements: [], resultElements: [], flowBreakDown: [], maxFlow: 0, isLoaded: true, error: { message: result.message }, originalGraph: [] });
         }
     }
 
@@ -209,23 +189,21 @@ export default class ResultPage extends Component {
     }
     render() {
         const { error, isLoaded, inputElements, residualElements, resultElements, flowBreakDown, maxFlow, style } = this.state;
-        console.log(error, isLoaded);
-        if (error && error.message != "") {
-            return <ErrorPage message={error.message} />
+        const screenHeight = window.screen.height + "px";
+        og(window.screen.availHeight - 100 + "px")
+        if (error && error.message !== "") {
+            return <Error message={error.message} />
         } else if (!isLoaded) {
-            return <LoadingPage />
+            return <Loading />
         } else {
             return (
-                <Container className="container-results" md={10}>
-                    <Helmet>
-                        <title>{this.title}</title>
-                        <link rel="icon" href="images/logo.png" sizes="16x16"></link>
-                    </Helmet>
+                <Container style={{ minHeight: screenHeight }}  className="container-results" md={10}>
+                    <Title title={this.title} />
                     <Row className="pt-5">
                         <Col lg={{ span: 8, offset: 2 }}>
-                            <p>The maximum flow for the below graph is <b>{maxFlow}</b></p>
-                            <p>Source - 0</p>
-                            <p>Sink - {this.state.noNodes}</p>
+                            <h4>The maximum flow for the below graph is <b>{maxFlow}</b></h4>
+                            <h4>Source - 0</h4>
+                            <h4>Sink - {this.state.noNodes}</h4>
                         </Col>
                     </Row>
                     <Row >
@@ -258,7 +236,6 @@ export default class ResultPage extends Component {
                     </Row>
 
                 </Container>
-
             );
         }
     }

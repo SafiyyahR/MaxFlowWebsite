@@ -1,21 +1,14 @@
 import React, { Component } from 'react'
 import { Container, Col, Row } from 'react-bootstrap'
-import { Helmet } from 'react-helmet'
-import '../HomePage/HomePage.css'
-import '../../index.css'
-export default class HomePage extends Component {
+import '../external-stylesheet.css'
+import Title from '../components/title'
+export default class Home extends Component {
     title = "Home | MX flow";
-    constructor(props) {
-        super(props);
-    }
-
     render() {
+        const screenHeight = window.screen.height + "px";
         return (
-            <Container className="pt-5 main-container">
-                <Helmet>
-                    <title>{this.title}</title>
-                    <link rel="icon" href="images/logo.png" sizes="16x16"></link>
-                </Helmet>
+            <Container style={{ minHeight: screenHeight }} className="pt-5">
+                <Title title={this.title} />
                 <Row>
                     <Col lg={{ span: 8, offset: 2 }}>
                         <h2>What is Max Flow?</h2>

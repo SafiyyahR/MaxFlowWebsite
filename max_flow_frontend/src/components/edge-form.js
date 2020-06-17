@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import { Form } from 'react-bootstrap'
+import { Col, Row, Form } from 'react-bootstrap'
 export default class EdgeForm extends Component {
     constructor(props) {
         super(props);
@@ -41,32 +40,26 @@ export default class EdgeForm extends Component {
             endNodeFeedback = "Please enter an integer";
             endNodeClass = "show";
             endNode = -1;
-            console.log(1);
         } else if (endNode == 0) {
             endNodeFeedback = "Node 0 cannot be an end node.";
             endNodeClass = "show";
             endNode = -1;
-            console.log(2);
         } else if (endNode < 0 || endNode >= this.state.noNodes) {
             endNodeFeedback = "Node " + endNode + " is not in the graph.";
             endNodeClass = "show";
             endNode = -1;
-            console.log(3);
         } else if (endNode == this.state.startNode) {
             endNodeFeedback = "Start node and end node cannot be the same.";
             endNodeClass = "show";
             endNode = -1;
-            console.log(4);
         } else if (endNode > 0 && endNode <= this.state.noNodes - 1) {
             endNodeFeedback = "";
             endNodeClass = "hide";
             endNode = parseInt(endNode);
-            console.log(5);
         }
         this.setState({ endNodeFeedback, endNodeClass, endNode }, () => {
             this.sendDataToParent();
         });
-        console.log(endNode, endNodeClass, endNodeFeedback, this.state.noNodes);
     }
 
     validateWeight(event) {

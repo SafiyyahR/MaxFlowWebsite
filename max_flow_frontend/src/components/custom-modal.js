@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-export default class FileModal extends Component {
+import { Col, Row, Button, Modal } from 'react-bootstrap'
+export default class CustomModal extends Component {
     constructor(props) {
         super(props);
         this.closeModal = this.closeModal.bind(this);
@@ -24,7 +22,7 @@ export default class FileModal extends Component {
                 <Modal.Body>
                     <Row>
                         <Col lg={{ span: 10, offset: 2 }}>
-                            <img src="images/fileFormat.png" className="img-fluid" />
+                            <img src="./images/fileFormat.png" className="img-fluid" alt="file format to be uploaded" />
                         </Col>
                     </Row>
                 </Modal.Body>

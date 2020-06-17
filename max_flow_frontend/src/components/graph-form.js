@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Col, Row, Form, Container } from 'react-bootstrap'
-export default class NodeEdge extends Component {
+export default class GraphForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,7 +45,6 @@ export default class NodeEdge extends Component {
             noNodes = 0;
         }
         this.setState({ noNodesFeedback, noNodesClass, noNodes }, () => {
-            console.log(noNodes, this.state.noNodes);
             this.validateNoEdges("");
             this.sendDataToParent()
         });
@@ -86,7 +85,6 @@ export default class NodeEdge extends Component {
             noEdges = 0;
         }
         this.setState({ noEdges, noEdgesClass, noEdgesFeedback }, () => {
-            console.log(this.state.noEdges, maxNoOfEdges, this.state.noNodes);
             this.sendDataToParent();
         });
 

@@ -1,6 +1,5 @@
 var WeightedGraph = require('../models/weightedGraph');
 exports.generate_network = function (details) {
-    console.log(details);
     if (!details.noNodes || !details.noEdges || !details.maxWeight) {
         return ({ message: "Insufficient Details Sent" });
     } else {
@@ -25,8 +24,6 @@ exports.generate_network = function (details) {
                         added_nodes.add(end);
                     }
                 }
-                // weightedGraph.printWeightedGraph(weightedGraph.linkedAdjacencyList);
-                // console.log(i);
                 if (!added_nodes.has(start) && start === (no_nodes - 2)) {
                     error = true;
                     break;
@@ -34,9 +31,7 @@ exports.generate_network = function (details) {
 
             }
             if (!error) {
-                console.log("hello");
                 var remaining_edges = no_edges - no_nodes + 1;
-                // console.log(remaining_edges)
                 for (let i = 0; i < remaining_edges; i++) {
                     var start = Math.floor(Math.random() * (no_nodes - 1));
                     var end = Math.floor(Math.random() * no_nodes);
@@ -48,10 +43,7 @@ exports.generate_network = function (details) {
                             i--;
                         }
                     }
-                    //weightedGraph.printWeightedGraph(weightedGraph.linkedAdjacencyList);
-                    // console.log(i);
                 }
-                console.log("hello1");
                 return weightedGraph;
             }
         }

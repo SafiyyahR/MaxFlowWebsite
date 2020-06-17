@@ -96,16 +96,6 @@ module.exports = class WeightedGraph {
         return false;
     }
 
-    printWeightedGraph(linkedList) {
-        for (let index = 0; index < linkedList.length; index++) {
-            var list = linkedList[index];
-            for (let index1 = 0; index1 < list.length; index1++) {
-                console.log(list[index1]);
-            }
-
-        }
-    }
-
     findEdge(start, end, linkedList) {
         //it is checked if the start node is greater than 0
         if (start >= 0) {
@@ -270,25 +260,6 @@ module.exports = class WeightedGraph {
                 }
                 //if it is zero the value is the same in the resultLinkedList
             }
-        }
-    }
-
-    displayBreakDownOfMaxFlowCalc() {
-        for (let index = 0; index < this.breakDownOfMaxFlow.length; index++) {
-            var outerList = this.breakDownOfMaxFlow[index];
-            //find the index of 0 aka the source
-            var indexOfSource = outerList.indexOf(0);
-            //loop till i is 0 where 0 is the index of the arrayList which has the sink
-            for (var i = indexOfSource; i >= 0; i--) {
-                console.log(outerList.get(i));
-                if (i == 0) {
-                    console.log(" = ");
-                } else {
-                    console.log(" -> ");
-                }
-            }
-            //print the path flow
-            console.log(outerList[outerList.length - 1] + "\n");
         }
     }
     compareTo(edge1, edge2) {

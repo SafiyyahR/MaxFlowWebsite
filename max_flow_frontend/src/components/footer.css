@@ -1,0 +1,13 @@
+.footer-content {
+    background-color: black;
+    color: white;
+}
+
+.footer-link {
+    background-color: black;
+    color: white;
+}
+
+.footer-link:hover {
+    color: rgb(185, 184, 184);
+}
