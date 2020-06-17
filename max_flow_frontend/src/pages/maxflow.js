@@ -349,7 +349,7 @@ export default class MaxFlow extends Component {
                                         }
                                     }}><Button className="form-submit-btn" disabled={infoDis}>Find Max Flow</Button></Link>
                                 </Col>
-                                <Col md={7} className="px-md-5">
+                                <Col md={7} className="px-md-5 mt-3">
                                     <Button variant="secondary" className="form-clear-btn px-5" type="reset" onClick={this.clearForm} >Clear</Button>
                                 </Col>
                             </Form.Group>
