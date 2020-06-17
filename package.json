@@ -1,7 +1,7 @@
 {
   "name": "max-flow",
   "version": "1.0.0",
-  "description": "\"Website used to calculate the max flow of a network\"",
+  "description": "Website used to calculate the max flow of a network",
   "scripts": {
     "start": "node ./max_flow_backend/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
