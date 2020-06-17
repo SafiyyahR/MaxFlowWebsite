@@ -29,10 +29,10 @@ export default class Results extends Component {
             var details = this.props.location.state.details;
         }
         if (option != null && (option === 1 || option === 2)) {
-            this.urlString = "https://maxflow.herokuapp.com/api/maxflow";
+            this.urlString = "api/maxflow";
             this.getResults(this.urlString, details);
         } else if (option != null && option === 3) {
-            this.urlString = "https://maxflow.herokuapp.com/api/random";
+            this.urlString = "/api/random";
             this.getResults(this.urlString, details);
         } else {
             const errorMessage = "Input graph not provided";
@@ -45,6 +45,7 @@ export default class Results extends Component {
     }
 
     getResults(urlString, details) {
+        console.log({ urlString, details });
         fetch(urlString, {
             method: "POST",
             body: JSON.stringify(details),
@@ -196,7 +197,7 @@ export default class Results extends Component {
             return <Loading />
         } else {
             return (
-                <Container style={{ minHeight: screenHeight }}  className="container-results" md={10}>
+                <Container style={{ minHeight: screenHeight }} className="container-results" md={10}>
                     <Title title={this.title} />
                     <Row className="pt-5">
                         <Col lg={{ span: 8, offset: 2 }}>
