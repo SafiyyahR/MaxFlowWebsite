@@ -190,7 +190,6 @@ export default class Results extends Component {
     render() {
         const { error, isLoaded, inputElements, residualElements, resultElements, flowBreakDown, maxFlow, style } = this.state;
         const screenHeight = window.screen.height + "px";
-        og(window.screen.availHeight - 100 + "px")
         if (error && error.message !== "") {
             return <Error message={error.message} />
         } else if (!isLoaded) {

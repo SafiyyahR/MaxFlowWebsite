@@ -47,6 +47,7 @@ export default class MaxFlow extends Component {
         this.validateFile = this.validateFile.bind(this);
         this.setShowModal = this.setShowModal.bind(this);
         this.openModal = this.openModal.bind(this);
+        this.clearForm = this.clearForm.bind(this);
     }
 
     handleOptionSelected(event) {
@@ -248,8 +249,36 @@ export default class MaxFlow extends Component {
     setShowModal(choice) {
         this.setState({ showModal: choice });
     }
-
-
+    clearForm() {
+        this.setState({
+            showModal: false,
+            graphClass: "show",
+            fileClass: "hide",
+            randomClass: "hide",
+            uploadingBtnClass: "hide",
+            uploadBtnClass: "show",
+            noNodes: 0,
+            noEdges: 0,
+            nodeEdgesValid: false,
+            edgeArray: [],
+            edgeArrayValid: false,
+            txtFileClass: "hide",
+            txtFileClassFeedBack: "Please upload a file with a txt extension.",
+            nodeEdgesGrValid: false,
+            noEdgesGr: 0,
+            noNodesGr: 0,
+            weightClass: "hide",
+            weightFeedback: "",
+            weight: 0,
+            maxWeightValid: false,
+            txtFileChosen: false,
+            noEdgesFile: 0,
+            noNodesFile: 0,
+            nodeEdgesFileValid: false,
+            edgeArrayFile: [],
+            edgeArrayFileValid: false
+        });
+    }
     render() {
         const { noNodes, graphClass, fileClass, randomClass, uploadingBtnClass, uploadBtnClass, fileMaxFlowBtnClass, noEdges, txtFileClass, txtFileClassFeedBack, weightClass, weightFeedback, showModal } = this.state;
         const infoDis = this.state.edgeArrayValid && this.state.nodeEdgesValid ? "" : "disabled";
@@ -320,6 +349,9 @@ export default class MaxFlow extends Component {
                                         }
                                     }}><Button className="form-submit-btn" disabled={infoDis}>Find Max Flow</Button></Link>
                                 </Col>
+                                <Col md={7} className="px-md-5">
+                                    <Button variant="secondary" className="form-clear-btn px-5" type="reset" onClick={this.clearForm} >Clear</Button>
+                                </Col>
                             </Form.Group>
                         </Col>
 
@@ -358,8 +390,8 @@ export default class MaxFlow extends Component {
                                         Uploading...
                                 </Button>
                             </Form.Group>
-                            <Form.Group as={Row} className={fileMaxFlowBtnClass}>
-                                <Col>
+                            <Form.Group as={Row}>
+                                <Col className={fileMaxFlowBtnClass}>
                                     <Link to={{
                                         pathname: "/results",
                                         state: {
@@ -381,7 +413,7 @@ export default class MaxFlow extends Component {
                             <Form.Group as={Row} controlId={"form-max-weight"}>
                                 <Form.Label column md={4} >Max Weight of an Edge</Form.Label>
                                 <Col md={4} >
-                                    <Form.Control onChange={this.validateMaxWeight} placeholder="10" />
+                                    <Form.Control onChange={this.validateMaxWeight}/>
                                     <Form.Control.Feedback type="invalid" className={weightClass}>
                                         {weightFeedback}
                                     </Form.Control.Feedback>
@@ -396,6 +428,9 @@ export default class MaxFlow extends Component {
                                             option: 3
                                         }
                                     }}><Button className="form-submit-btn" disabled={graphDis}>Find Max Flow</Button></Link>
+                                </Col>
+                                <Col md={7} className="px-md-5">
+                                    <Button variant="secondary" className="form-clear-btn px-5" type="reset" onClick={this.clearForm} >Clear</Button>
                                 </Col>
                             </Form.Group>
                         </Col>

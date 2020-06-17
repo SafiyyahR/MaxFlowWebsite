@@ -96,7 +96,7 @@ export default class GraphForm extends Component {
                 <Form.Group as={Row} controlId="form-no-nodes">
                     <Form.Label column md={4}>Number of Nodes in Graph</Form.Label>
                     <Col md={4}>
-                        <Form.Control placeholder="6" onChange={this.validateNoNodes} />
+                        <Form.Control onChange={this.validateNoNodes} />
                         <Form.Control.Feedback type="invalid" className={noNodesClass}>
                             {noNodesFeedback}
                         </Form.Control.Feedback></Col>
@@ -104,7 +104,7 @@ export default class GraphForm extends Component {
                 <Form.Group as={Row} controlId="form-no-edges">
                     <Form.Label column md={4}>Number of Edges in Graph</Form.Label>
                     <Col md={4}>
-                        <Form.Control placeholder="11" onChange={this.validateNoEdges} />
+                        <Form.Control onChange={this.validateNoEdges} />
                         <Form.Control.Feedback type="invalid" className={noEdgesClass}>
                             {noEdgesFeedback}
                         </Form.Control.Feedback>

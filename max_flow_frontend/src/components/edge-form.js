@@ -126,7 +126,7 @@ export default class EdgeForm extends Component {
                         <Form.Label column >Start Node {index + 1}</Form.Label>
                     </Col>
                     <Col >
-                        <Form.Control onChange={this.validateStartNode} placeholder="10" />
+                        <Form.Control onChange={this.validateStartNode} />
                         <Form.Control.Feedback type="invalid" className={startNodeClass}>
                             {startNodeFeedback}
                         </Form.Control.Feedback>
@@ -137,7 +137,7 @@ export default class EdgeForm extends Component {
                         <Form.Label column >Weight {index + 1}</Form.Label>
                     </Col>
                     <Col >
-                        <Form.Control onChange={this.validateWeight} placeholder="10" />
+                        <Form.Control onChange={this.validateWeight} />
                         <Form.Control.Feedback type="invalid" className={weightClass}>
                             {weightFeedback}
                         </Form.Control.Feedback>
@@ -148,7 +148,7 @@ export default class EdgeForm extends Component {
                         <Form.Label column  >End Node {index + 1}</Form.Label>
                     </Col>
                     <Col >
-                        <Form.Control onChange={this.validateEndNode} placeholder="4" />
+                        <Form.Control onChange={this.validateEndNode} />
                         <Form.Control.Feedback type="invalid" className={endNodeClass}>
                             {endNodeFeedback}
                         </Form.Control.Feedback>
