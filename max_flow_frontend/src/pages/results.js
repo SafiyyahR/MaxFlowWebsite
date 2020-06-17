@@ -29,10 +29,10 @@ export default class Results extends Component {
             var details = this.props.location.state.details;
         }
         if (option != null && (option === 1 || option === 2)) {
-            this.urlString = "http://localhost:5000/api/maxflow";
+            this.urlString = "https://maxflow.herokuapp.com/api/maxflow";
             this.getResults(this.urlString, details);
         } else if (option != null && option === 3) {
-            this.urlString = "http://localhost:5000/api/random";
+            this.urlString = "https://maxflow.herokuapp.com/api/random";
             this.getResults(this.urlString, details);
         } else {
             const errorMessage = "Input graph not provided";

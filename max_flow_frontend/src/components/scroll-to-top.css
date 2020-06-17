@@ -21,6 +21,7 @@
     cursor: pointer;
     left: 95%;
     z-index: 1000;
+    text-align: center;
 }
 
 .custom-btn-scroll-top:hover {
