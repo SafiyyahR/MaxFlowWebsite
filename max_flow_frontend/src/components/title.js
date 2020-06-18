@@ -30,7 +30,7 @@ export default class Title extends Component {
                         "sizes": "16x16"
                     }
                 ]}
-            ><meta name="google-site-verification" content="yBH6Jg106ZnMuXnSp_g65AH-JHEzy9ti72QibGWTqeo" /></Helmet>
+            />
         );
     }
 }
