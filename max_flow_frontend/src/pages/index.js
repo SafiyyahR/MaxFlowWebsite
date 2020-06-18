@@ -28,7 +28,11 @@ export default class Home extends Component {
                                 <li><b>.</b> &nbsp;RETURN max_flow</li>
                             </ol>
                         </Row>
-                        <h2>References</h2></Col>
+                        <h2>Other Resource</h2>
+                        <a href="https://www.geeksforgeeks.org/ford-fulkerson-algorithm-for-maximum-flow-problem/">The implementation of the Ford-Fulkerson Algorithm</a>
+                        <a href="https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/">Depth First Search - Introduction & Implementation</a>
+                        <a href="https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/">Breadth First Search - Introduction & Implementation</a>
+                    </Col>
                 </Row>
             </Container>
         );
