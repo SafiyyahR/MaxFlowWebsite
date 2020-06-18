@@ -18,7 +18,10 @@ export default class Title extends Component {
             <Helmet
                 title={title}
                 meta={[
-                    { name: "author", content: "Safiyyah Thur Rahman" }
+                    { name: "author", content: "Safiyyah Thur Rahman" },
+                    { name: "og:site_name", content: "MX flow" },
+                    { name: "keywords", content: "Mx flow, Max Flow, Randomly generated flow network, Find Max Flow, Find Maximum Flow, File, Safiyyah Thur Rahman" },
+                    {name:"google-site-verification", content:"yBH6Jg106ZnMuXnSp_g65AH-JHEzy9ti72QibGWTqeo"}
                 ]}
                 link={[
                     {
