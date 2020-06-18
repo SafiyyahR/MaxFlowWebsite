@@ -6,7 +6,7 @@
     "start": "node ./max_flow_backend/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-prebuild": "echo This runs before Heroku installs your dependencies.",
-    "heroku-postbuild": "echo This runs afterwards."
+    "heroku-postbuild": "cd max_flow_frontend && npm install && npm run build"
   },
   "repository": {
     "type": "git",
