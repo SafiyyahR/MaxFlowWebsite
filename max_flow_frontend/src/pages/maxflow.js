@@ -295,7 +295,7 @@ export default class MaxFlow extends Component {
         const detailsRand = { "noNodes": this.state.noNodesGr, "noEdges": this.state.noEdgesGr, "maxWeight": this.state.weight };
         const screenHeight = window.screen.height + "px";
         return (
-            < Container style={{ minHeight: screenHeight }} className="pt-5" >
+            < Container style={{ minHeight: screenHeight }} className="py-5" >
                 <Title title={this.title} />
                 <Row>
                     <Col lg={{ span: 8, offset: 2 }}>
@@ -347,7 +347,7 @@ export default class MaxFlow extends Component {
                                             details: detailsInfo,
                                             option: 1
                                         }
-                                    }}><Button className="form-submit-btn" disabled={infoDis}>Find Max Flow</Button></Link>
+                                    }}><Button className="form-submit-btn px-3" disabled={infoDis}>Find Max Flow</Button></Link>
                                 </Col>
                                 <Col md={7} className="px-md-5 mt-3">
                                     <Button variant="secondary" className="form-clear-btn px-5" type="reset" onClick={this.clearForm} >Clear</Button>
@@ -413,7 +413,7 @@ export default class MaxFlow extends Component {
                             <Form.Group as={Row} controlId={"form-max-weight"}>
                                 <Form.Label column md={4} >Max Weight of an Edge</Form.Label>
                                 <Col md={4} >
-                                    <Form.Control onChange={this.validateMaxWeight}/>
+                                    <Form.Control onChange={this.validateMaxWeight} />
                                     <Form.Control.Feedback type="invalid" className={weightClass}>
                                         {weightFeedback}
                                     </Form.Control.Feedback>
@@ -427,7 +427,7 @@ export default class MaxFlow extends Component {
                                             details: detailsRand,
                                             option: 3
                                         }
-                                    }}><Button className="form-submit-btn" disabled={graphDis}>Find Max Flow</Button></Link>
+                                    }}><Button className="form-submit-btn px-3" disabled={graphDis}>Find Max Flow</Button></Link>
                                 </Col>
                                 <Col md={7} className="px-md-5 mt-3">
                                     <Button variant="secondary" className="form-clear-btn px-5" type="reset" onClick={this.clearForm} >Clear</Button>

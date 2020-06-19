@@ -8,7 +8,7 @@ export default class Error extends Component {
         const { message } = this.props;
         const screenHeight = window.screen.height + "px";
         return (
-            <Container style={{ minHeight: screenHeight }}  className="pt-5">
+            <Container style={{ minHeight: screenHeight }}  className="py-5">
                 <Title title={this.title} />
                 <Row>
                     <Col lg={{ span: 8, offset: 2 }}>

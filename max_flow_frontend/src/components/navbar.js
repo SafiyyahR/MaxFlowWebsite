@@ -25,7 +25,7 @@ export default class NavBar extends Component {
                 <Navbar.Toggle aria-controls="navbar-responsive" className="mr-2" />
                 <Navbar.Collapse id="navbar-responsive">
                     <Nav className="align-items-center justify-content-end navbar-custom-collapse">
-                        <NavLink className="custom-link" to="/" exact="true" activeClassName="active">
+                        <NavLink className="custom-link" to="/" exact activeClassName="active">
                             <NavItem className="p-3 custom-nav-item text-center" ><FontAwesomeIcon className="custom-link-icon" icon={faHome} />Home</NavItem>
                         </NavLink>
                         <NavLink className="custom-link" to="/maxflow" activeClassName="active">
