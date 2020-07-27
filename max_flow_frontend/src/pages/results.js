@@ -205,7 +205,7 @@ export default class Results extends Component {
                         <Col lg={{ span: 8, offset: 2 }}>
                             <h4>The maximum flow for the below graph is <b>{maxFlow}</b></h4>
                             <h4>Source - 0</h4>
-                            <h4>Sink - {this.state.noNodes}</h4>
+                            <h4>Sink - {this.state.noNodes-1}</h4>
                         </Col>
                     </Row>
                     <Row >
