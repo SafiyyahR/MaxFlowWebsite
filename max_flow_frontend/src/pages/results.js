@@ -30,9 +30,11 @@ export default class Results extends Component {
         }
         if (option != null && (option === 1 || option === 2)) {
             this.urlString = "https://mxflow.herokuapp.com/api/maxflow";
+            console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else if (option != null && option === 3) {
             this.urlString = "https://mxflow.herokuapp.com/api/random";
+            console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else {
             const errorMessage = "Input graph not provided";
