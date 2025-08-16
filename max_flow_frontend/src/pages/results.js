@@ -29,11 +29,11 @@ export default class Results extends Component {
             var details = this.props.location.state.details;
         }
         if (option != null && (option === 1 || option === 2)) {
-            this.urlString = "https://mxflow.herokuapp.com/api/maxflow";
+            this.urlString = "http://localhost:5000/api/maxflow";
             console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else if (option != null && option === 3) {
-            this.urlString = "https://mxflow.herokuapp.com/api/random";
+            this.urlString = "http://localhost:5000/api/random";
             console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else {

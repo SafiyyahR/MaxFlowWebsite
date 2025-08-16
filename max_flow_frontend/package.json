@@ -11,7 +11,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "avsdf-base": "^1.0.0",
-    "bootstrap": "^4.5.0",
+    "bootstrap": "^5.3.7",
     "cytoscape": "^3.15.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-cose-bilkent": "^4.1.0",
@@ -23,15 +23,13 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
     "react-pace-progress": "^2.0.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-router-dom": "^5.2.0"
   },
   "proxy": "https://maxflow.herokuapp.com/",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,5 +45,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.1.2"
   }
 }
