@@ -28,7 +28,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "vite": "^7.1.2"
   },
-  "proxy": "https://maxflow-f6ebf7040c30.herokuapp.com/",
+  "proxy": "https://mxflow-c75c37b14afd.herokuapp.com/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

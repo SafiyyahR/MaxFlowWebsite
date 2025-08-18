@@ -29,11 +29,11 @@ export default class Results extends Component {
             var details = this.props.location.state.details;
         }
         if (option != null && (option === 1 || option === 2)) {
-            this.urlString = "https://maxflow-f6ebf7040c30.herokuapp.com/api/maxflow";
+            this.urlString = "https://mxflow-c75c37b14afd.herokuapp.com/api/maxflow";
             console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else if (option != null && option === 3) {
-            this.urlString = "https://maxflow-f6ebf7040c30.herokuapp.com/api/random";
+            this.urlString = "https://mxflow-c75c37b14afd.herokuapp.com/api/random";
             console.log(this.urlString);
             this.getResults(this.urlString, details);
         } else {
